@@ -35,6 +35,12 @@ namespace EnhancedShot
             this.nameRuleList.Items.Add("ウィンドウタイトルで保存");
             this.nameRuleList.Items.Add("ウィンドウタイトルから正規表現で指定して保存");
             this.nameRuleList.Items.Add("固定名称で保存");
+
+            this.subFolderRuleList.Items.Add("サブフォルダを使用しない");
+            this.subFolderRuleList.Items.Add("ウィンドウタイトルで保存");
+            this.subFolderRuleList.Items.Add("ウィンドウタイトルから正規表現で指定して保存");
+            this.subFolderRuleList.Items.Add("固定名称で保存");
+
         }
 
         public void close(object sender, System.ComponentModel.CancelEventArgs e)

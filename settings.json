@@ -1,0 +1,30 @@
+{
+    "menu": {
+        "preset": "",
+        "subfolder": "",
+        "filename": ""
+    },
+    "common": {
+        "top_most": true,
+        "shortcut_rec": true,
+        "shortcut_shot": true,
+        "shortcut_play": true
+    },
+    "presets": [
+        {
+            "name": "default",
+            "x": 0,
+            "y": 0,
+            "width": 720,
+            "height": 1280,
+            "target": ".*",
+            "extension": 0,
+            "save_path": "c:/",
+            "sub_folder_name_rule": 0,
+            "sub_folder_name": "sub001",
+            "filename_rule": 0,
+            "filename": "capture%03d"
+
+        }
+    ]
+}

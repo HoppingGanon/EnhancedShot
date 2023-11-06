@@ -1,6 +1,8 @@
-﻿using System;
+﻿using EnhancedShot.viewmodels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO.Packaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +10,7 @@ using System.Windows;
 
 namespace EnhancedShot
 {
-    internal class MainViewModel : INotifyPropertyChanged
+    internal class MainViewModel : FlatSettings, INotifyPropertyChanged
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -19,11 +21,12 @@ namespace EnhancedShot
             get { return fileName; }
             set { 
                 fileName = value;
-
-                MessageBox.Show(value);
             }
         }
 
+        public string subFolderLabel = "サブフォルダ名";
+
+        public string nameLabel = "ファイル名";
         public MainViewModel()
         {
 
