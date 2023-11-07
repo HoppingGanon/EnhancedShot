@@ -32,6 +32,20 @@ namespace EnhancedShot
 
         }
 
+        public string previewImage = "/resource/noimage.png";
+        public string PreviewImage
+        {
+            get { return this.previewImage; }
+            set {  this.previewImage = value; }
+        }
+
+        public int previewSlider = 0;
+        public int PreviewSlider
+        {
+            get { return this.previewSlider; }
+            set { this.previewSlider = value; }
+        }
+
 
         //UIに自動更新を行うためのイベント
         protected virtual void RaisePropertyChanged(string propertyName)

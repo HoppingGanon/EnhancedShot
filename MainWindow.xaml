@@ -40,7 +40,7 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <Label Content="プリセット" Grid.Row="0" Grid.Column="0" x:Name="presetList" />
-                            <ComboBox  Grid.Row="0" Grid.Column="1" Text="{Binding Preset}" />
+                            <ComboBox  Grid.Row="0" Grid.Column="1" SelectedIndex="{Binding Preset, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
 
                         <Grid Margin="0,0,0,3">
@@ -52,7 +52,7 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <Label Content="サブフォルダ" Grid.Row="0" Grid.Column="0" />
-                            <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True" />
+                            <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True" Text="{Binding SubFolder, UpdateSourceTrigger=PropertyChanged}" />
                         </Grid>
 
 
@@ -60,10 +60,9 @@
                             <Image Source="/resource/rec.png" />
                         </Button>
 
-                        <Image Height="200" Margin="0,0,0,3" Source="/resource/noimage.png" />
+                        <Image Height="200" Margin="0,0,0,3" Source="{Binding PreviewImage, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <Slider />
-
+                        <Slider Value="{Binding PreviewSlider, UpdateSourceTrigger=PropertyChanged}" Minimum="0" Maximum="{Binding PreviewBuffSize, UpdateSourceTrigger=PropertyChanged}" />
 
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,3" HorizontalAlignment="Center" VerticalAlignment="Top" >
                             <Button Width="35" Height="35" Margin="5,0,5,0">
@@ -100,17 +99,18 @@
 
                         <GroupBox Header="プリセット設定">
                             <StackPanel>
-                                <Grid Margin="3,5,0,3">
+                                <Grid Margin="3,5,0,10">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
-                                        <ColumnDefinition Width="45" />
-                                        <ColumnDefinition Width="45" />
+                                        <ColumnDefinition Width="35" />
+                                        <ColumnDefinition Width="35" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="0,0,3,0" IsEditable="True" />
-                                    <Button Content="追加" Grid.Row="0" Grid.Column="1" Margin="0,0,3,0" />
+                                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="0,0,3,0" IsEditable="True" SelectedIndex="{Binding Preset2, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="onSettingPresetChanged" />
+
+                                    <Button Content="保存" Grid.Row="0" Grid.Column="1" Margin="0,0,3,0" />
                                     <Button Content="削除" Grid.Row="0" Grid.Column="2" />
                                 </Grid>
                                 
@@ -123,7 +123,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="ポジション指定" Grid.Row="1" Grid.Column="0" />
-                                    <ComboBox Grid.Row="1" Grid.Column="1" x:Name="shotPositionList" >
+                                    <ComboBox Grid.Row="1" Grid.Column="1" x:Name="shotPositionList" SelectedIndex="{Binding ShotPosition}" >
                                     </ComboBox>
                                 </Grid>
 
@@ -138,9 +138,9 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="座標" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" />
                                     <Label Content="x" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" />
-                                    <TextBox Grid.Row="1" Grid.Column="3" />
+                                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -154,9 +154,9 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="サイズ" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"/>
                                     <Label Content="x" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" />
-                                    <TextBox Grid.Row="1" Grid.Column="3" />
+                                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -168,7 +168,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="ターゲット" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
                                 
                                 <Grid Margin="0,0,0,3">
@@ -180,7 +180,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="拡張子" Grid.Row="1" Grid.Column="0" />
-                                    <ComboBox Grid.Row="1" Grid.Column="1" x:Name="extensionList" />
+                                    <ComboBox Grid.Row="1" Grid.Column="1" x:Name="extensionList" SelectedIndex="{Binding Extension, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -192,7 +192,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="保存先パス" Grid.Row="0" Grid.Column="0" Margin="0,0,0,3" />
-                                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,3" />
+                                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,3" Text="{Binding Filename2, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -204,7 +204,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="サブフォルダ命名" Grid.Row="0" Grid.Column="0" />
-                                    <ComboBox Grid.Row="0" Grid.Column="1" x:Name="subFolderRuleList" />
+                                    <ComboBox Grid.Row="0" Grid.Column="1" x:Name="subFolderRuleList" SelectedIndex="{Binding SubFolderNameRule, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -216,7 +216,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="{Binding SubFolderLabel}" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SubFolderName, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -228,7 +228,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="ファイル命名" Grid.Row="0" Grid.Column="0" />
-                                    <ComboBox Grid.Row="0" Grid.Column="1" x:Name="nameRuleList" />
+                                    <ComboBox Grid.Row="0" Grid.Column="1" x:Name="nameRuleList" SelectedIndex="{Binding FilenameRule, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -240,14 +240,14 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="{Binding NameLabel}" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Filename, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
                             </StackPanel>
                         </GroupBox>
 
                         <GroupBox Header="共通設定">
                             <StackPanel>
-                                <CheckBox Content="常に最前面に表示" Margin="0,0,0,3" />
+                                <CheckBox Content="常に最前面に表示" Margin="0,0,0,3" IsChecked="{Binding TopMost, UpdateSourceTrigger=PropertyChanged}" />
 
                                 <Grid Margin="0,0,0,3">
                                     <Grid.ColumnDefinitions>
@@ -261,9 +261,9 @@
 
                                 <Label Content="ショートカット" Grid.Row="1" Grid.Column="0" />
                                 <StackPanel Margin="0,0,0,3">
-                                    <CheckBox Content="自動録画の開始/停止(Ctrl + Shift + R)" />
-                                    <CheckBox Content="スクリーンショットの保存(Ctrl + Shift + S)" />
-                                    <CheckBox Content="再生の開始/停止(Ctrl + Shift + A)" />
+                                    <CheckBox Content="自動録画の開始/停止(Ctrl + Shift + R)" IsChecked="{Binding ShortcutRec, UpdateSourceTrigger=PropertyChanged}" />
+                                    <CheckBox Content="スクリーンショットの保存(Ctrl + Shift + S)" IsChecked="{Binding ShortcutShot, UpdateSourceTrigger=PropertyChanged}" />
+                                    <CheckBox Content="再生の開始/停止(Ctrl + Shift + A)" IsChecked="{Binding ShortcutPlay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>

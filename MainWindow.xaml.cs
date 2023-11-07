@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -45,6 +46,12 @@ namespace EnhancedShot
 
         public void close(object sender, System.ComponentModel.CancelEventArgs e)
         {
+
+        }
+
+        private void onSettingPresetChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Debug.Print("");
 
         }
     }
