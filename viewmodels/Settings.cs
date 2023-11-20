@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -109,6 +110,22 @@ namespace EnhancedShot.viewmodels
 
             return o;
         }
+
+        public bool equals (PresetSettings o) {
+            return o.name == this.name &&
+            o.shot_position == this.shot_position &&
+            o.x == this.x &&
+            o.y == this.y &&
+            o.width == this.width &&
+            o.height == this.height &&
+            o.target == this.target &&
+            o.extension == this.extension &&
+            o.save_path == this.save_path &&
+            o.sub_folder_name_rule == this.sub_folder_name_rule &&
+            o.sub_folder_name == this.sub_folder_name &&
+            o.filename_rule == this.filename_rule &&
+            o.filename == this.filename;
+        }
     }
 
     internal class FlatSettings
@@ -116,6 +133,8 @@ namespace EnhancedShot.viewmodels
         public PresetSettings preset;
 
         public Settings settings;
+
+        public bool listening = false;
 
         public FlatSettings() {
             this.preset = new PresetSettings();
@@ -138,10 +157,15 @@ namespace EnhancedShot.viewmodels
             {
                 MessageBox.Show("settings.jsonが読み込めませんでした\n" + e.Message);
             }
+            if (0 <= this.Preset && this.Preset < this.settings.presets.Count) {
+                this.preset = this.settings.presets[this.Preset].clone();
+            }
+            
         }
 
-        public void saveJson(string path)
+        public bool saveJson(string path)
         {
+
             try
             {
                 using (var stream = new FileStream(path, FileMode.Create))
@@ -153,28 +177,54 @@ namespace EnhancedShot.viewmodels
                         
                     }
                 }
+                return true;
             }
             catch (Exception e)
             {
                 MessageBox.Show("settings.json保存できませんでした\n" + e.Message);
+                return false;
             }
         }
 
-        public void setPreset(string name)
+        public int savePreset(string name)
+        {
+            var hits = this.settings.presets.Where(p => p.name == name).Select((p, index) => new {p = p, index = index}).ToArray();
+            if (hits.Count() > 0)
+            {
+                this.settings.presets.Remove(hits[0].p);
+            }
+
+            var newPreset = this.preset.clone();
+            newPreset.name = name;
+            this.settings.presets = (new List<PresetSettings> { newPreset }).Concat(this.settings.presets).ToList();
+
+            if (hits.Count() > 0)
+            {
+                this.Preset = hits[0].index;
+                MessageBox.Show($"プリセット'{name}'を更新しました");
+            }
+            else
+            {
+                this.Preset = 0;
+                newPreset.name = name;
+                MessageBox.Show($"プリセット'{name}'を追加しました");
+            }
+
+            return this.Preset;
+        }
+        public int deletePreset(string name)
         {
             var hits = this.settings.presets.Where(p => p.name == name);
             if (hits.Count() > 0)
             {
                 this.settings.presets.Remove(hits.ToArray()[0]);
-                MessageBox.Show($"プリセット'{name}'を更新しました");
-            } else
-            {
-                MessageBox.Show($"プリセット'{name}'を追加しました");
+                MessageBox.Show($"プリセット'{name}'を削除しました");
             }
-            this.preset.name = name;
-            this.settings.presets = (new List<PresetSettings> {this.preset}).Concat(this.settings.presets).ToList();
-            this.Preset = 0;
             this.saveJson("settings.json");
+
+            this.Preset = Math.Max(0, this.Preset - 1);
+
+            return this.Preset;
         }
 
         public int Preset
@@ -315,6 +365,14 @@ namespace EnhancedShot.viewmodels
         {
             get { return this.preset.filename; }
             set { this.preset.filename = value; }
+        }
+
+        public string[] PresetList
+        {
+            get
+            {
+                return this.settings.presets.Select(preset => preset.name).ToArray();
+            }
         }
     }
 }

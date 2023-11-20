@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Newtonsoft.Json;
+using System.Threading;
 
 namespace EnhancedShot
 {
@@ -15,6 +16,7 @@ namespace EnhancedShot
     {
 
         public event PropertyChangedEventHandler PropertyChanged;
+
 
         public string fileName;
         public string FileName
@@ -31,11 +33,12 @@ namespace EnhancedShot
         public MainViewModel()
         {
             this.loadJson("settings.json");
+            this.listening = true;
         }
 
-        public void close()
+        public bool close()
         {
-            this.saveJson("settings.json");
+            return this.saveJson("settings.json");
         }
 
         public string previewImage = "/resource/noimage.png";

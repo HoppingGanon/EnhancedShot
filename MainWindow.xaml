@@ -40,7 +40,7 @@
                                 <RowDefinition />
                             </Grid.RowDefinitions>
                             <Label Content="プリセット" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
-                            <ComboBox Grid.Row="0" Grid.Column="2" SelectedIndex="{Binding Preset, UpdateSourceTrigger=PropertyChanged}" x:Name="preset2List" />
+                            <ComboBox Grid.Row="0" Grid.Column="2" SelectedIndex="{Binding Preset, UpdateSourceTrigger=PropertyChanged}" x:Name="preset2List" ItemsSource="{Binding PresetList}" />
                         </Grid>
 
                         <Grid Margin="0,0,0,3">
@@ -108,10 +108,10 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="0,0,3,0" IsEditable="True" SelectionChanged="onSettingPresetChanged" Name="presetList" />
+                                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="0,0,3,0" SelectedIndex="{Binding Preset, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding PresetList}" Name="presetList" />
 
                                     <Button x:Name="saveButton" Content="保存" Grid.Row="0" Grid.Column="1" Margin="0,0,3,0" />
-                                    <Button Content="削除" Grid.Row="0" Grid.Column="2" />
+                                    <Button x:Name="delButton" Content="削除" Grid.Row="0" Grid.Column="2" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
