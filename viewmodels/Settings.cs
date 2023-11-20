@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace EnhancedShot.viewmodels
 {
@@ -80,101 +83,203 @@ namespace EnhancedShot.viewmodels
             this.height = 720;
             this.target = "";
             this.extension = 0;
+            this.save_path = "";
             this.sub_folder_name_rule = 0;
             this.sub_folder_name = "";
             this.filename_rule = 0;
             this.filename = "";
         }
+
+        public PresetSettings clone()
+        {
+            var o = new PresetSettings();
+            o.name =  this.name;
+            o.shot_position = this.shot_position;
+            o.x = this.x;
+            o.y = this.y;
+            o.width = this.width;
+            o.height = this.height;
+            o.target = this.target;
+            o.extension = this.extension;
+            o.save_path = this.save_path;
+            o.sub_folder_name_rule = this.sub_folder_name_rule;
+            o.sub_folder_name = this.sub_folder_name;
+            o.filename_rule = this.filename_rule;
+            o.filename = this.filename;
+
+            return o;
+        }
     }
 
-    internal class FlatSettings : Settings
+    internal class FlatSettings
     {
         public PresetSettings preset;
-        public string preset2;
+
+        public Settings settings;
 
         public FlatSettings() {
             this.preset = new PresetSettings();
+            this.settings = new Settings();
+        }
+
+        public void loadJson(string path)
+        {
+            try
+            {
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    // JSONファイルを読み出す
+                    using (var sr = new StreamReader(stream))
+                    {
+                        this.settings = JsonConvert.DeserializeObject<Settings>(sr.ReadToEnd());
+                    }
+                }
+            }catch(Exception e)
+            {
+                MessageBox.Show("settings.jsonが読み込めませんでした\n" + e.Message);
+            }
+        }
+
+        public void saveJson(string path)
+        {
+            try
+            {
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    // JSONファイルを読み出す
+                    using (var sr = new StreamWriter(stream))
+                    {
+                        sr.WriteAsync(JsonConvert.SerializeObject(this.settings));
+                        
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("settings.json保存できませんでした\n" + e.Message);
+            }
+        }
+
+        public void setPreset(string name)
+        {
+            var hits = this.settings.presets.Where(p => p.name == name);
+            if (hits.Count() > 0)
+            {
+                this.settings.presets.Remove(hits.ToArray()[0]);
+                MessageBox.Show($"プリセット'{name}'を更新しました");
+            } else
+            {
+                MessageBox.Show($"プリセット'{name}'を追加しました");
+            }
+            this.preset.name = name;
+            this.settings.presets = (new List<PresetSettings> {this.preset}).Concat(this.settings.presets).ToList();
+            this.Preset = 0;
+            this.saveJson("settings.json");
         }
 
         public int Preset
         {
-            get { return this.menu.preset; }
-            set { this.menu.preset = value; }
+            get { return this.settings.menu.preset; }
+            set { this.settings.menu.preset = value; }
         }
         public string SubFolder
         {
-            get { return this.menu.sub_folder; }
-            set { this.menu.sub_folder = value; }
+            get { return this.settings.menu.sub_folder; }
+            set { this.settings.menu.sub_folder = value; }
         }
         public string Filename
         {
-            get { return this.menu.filename; }
-            set { this.menu.filename = value; }
+            get { return this.settings.menu.filename; }
+            set { this.settings.menu.filename = value; }
         }
 
         public bool TopMost
         {
-            get { return this.common.top_most; }
-            set { this.common.top_most = value; }
+            get { return this.settings.common.top_most; }
+            set { this.settings.common.top_most = value; }
         }
         public bool ShortcutRec
         {
-            get { return this.common.shortcut_rec; }
-            set { this.common.shortcut_rec = value; }
+            get { return this.settings.common.shortcut_rec; }
+            set { this.settings.common.shortcut_rec = value; }
         }
         public bool ShortcutShot
         {
-            get { return this.common.shortcut_shot; }
-            set { this.common.shortcut_shot = value; }
+            get { return this.settings.common.shortcut_shot; }
+            set { this.settings.common.shortcut_shot = value; }
         }
         public bool ShortcutPlay
         {
-            get { return this.common.shortcut_play; }
-            set { this.common.shortcut_play = value; }
+            get { return this.settings.common.shortcut_play; }
+            set { this.settings.common.shortcut_play = value; }
         }
         public int PreviewBuffSize
         {
-            get { return this.common.previewBuffSize; }
-            set { this.common.previewBuffSize = value; }
+            get { return this.settings.common.previewBuffSize; }
+            set { this.settings.common.previewBuffSize = value; }
         }
         public int MaxFramerate
         {
-            get { return this.common.maxFramerate; }
-            set { this.common.maxFramerate = value; }
+            get { return this.settings.common.maxFramerate; }
+            set { this.settings.common.maxFramerate = value; }
         }
 
-        public string Name
-        {
-            get { return this.preset.name; }
-            set { this.preset.name = value; }
-        }
         public int ShotPosition
         {
             get { return this.preset.shot_position; }
             set {
-                Debug.Print(value.ToString());
                 this.preset.shot_position = value;
             }
         }
-        public int X
+        public string X
         {
-            get { return this.preset.x; }
-            set { this.preset.x = value; }
+            get { return ""+ this.preset.x; }
+            set {
+                try
+                {
+                    this.preset.x = int.Parse(value);
+                } catch
+                { /* ignore */ }
+            }
         }
-        public int Y
+        public string Y
         {
-            get { return this.preset.y; }
-            set { this.preset.y = value; }
+            get { return "" + this.preset.y; }
+            set
+            {
+                try
+                {
+                    this.preset.y = int.Parse(value);
+                }
+                catch
+                { /* ignore */ }
+            }
         }
-        public int Width
+        public string Width
         {
-            get { return this.preset.width; }
-            set { this.preset.width = value; }
+            get { return "" + this.preset.width; }
+            set
+            {
+                try
+                {
+                    this.preset.width = int.Parse(value);
+                }
+                catch
+                { /* ignore */ }
+            }
         }
-        public int Height
+        public string Height
         {
-            get { return this.preset.height; }
-            set { this.preset.height = value; }
+            get { return "" + this.preset.height; }
+            set
+            {
+                try
+                {
+                    this.preset.height = int.Parse(value);
+                }
+                catch
+                { /* ignore */ }
+            }
         }
         public string Target
         {
@@ -210,11 +315,6 @@ namespace EnhancedShot.viewmodels
         {
             get { return this.preset.filename; }
             set { this.preset.filename = value; }
-        }
-        public string Preset2
-        {
-            get { return this.preset2; }
-            set { this.preset2 = value; }
         }
     }
 }

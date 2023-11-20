@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Newtonsoft.Json;
 
 namespace EnhancedShot
 {
@@ -29,7 +30,12 @@ namespace EnhancedShot
         public string nameLabel = "ファイル名";
         public MainViewModel()
         {
+            this.loadJson("settings.json");
+        }
 
+        public void close()
+        {
+            this.saveJson("settings.json");
         }
 
         public string previewImage = "/resource/noimage.png";

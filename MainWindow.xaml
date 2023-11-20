@@ -15,7 +15,6 @@
     </Window.DataContext>
     <Grid>
         <StackPanel Margin="10,10,10,10">
-
             <Grid Margin="0,0,0,3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="104*" />
@@ -33,14 +32,15 @@
                     <StackPanel>
                         <Grid Margin="0,0,0,3">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80" />
+                                <ColumnDefinition Width="66.242" />
+                                <ColumnDefinition Width="13.758"/>
                                 <ColumnDefinition />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                             </Grid.RowDefinitions>
-                            <Label Content="プリセット" Grid.Row="0" Grid.Column="0" x:Name="presetList" />
-                            <ComboBox  Grid.Row="0" Grid.Column="1" SelectedIndex="{Binding Preset, UpdateSourceTrigger=PropertyChanged}" />
+                            <Label Content="プリセット" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" />
+                            <ComboBox Grid.Row="0" Grid.Column="2" SelectedIndex="{Binding Preset, UpdateSourceTrigger=PropertyChanged}" x:Name="preset2List" />
                         </Grid>
 
                         <Grid Margin="0,0,0,3">
@@ -108,12 +108,12 @@
                                     <Grid.RowDefinitions>
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="0,0,3,0" IsEditable="True" SelectedIndex="{Binding Preset2, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="onSettingPresetChanged" />
+                                    <ComboBox Grid.Row="0" Grid.Column="0" Margin="0,0,3,0" IsEditable="True" SelectionChanged="onSettingPresetChanged" Name="presetList" />
 
-                                    <Button Content="保存" Grid.Row="0" Grid.Column="1" Margin="0,0,3,0" />
+                                    <Button x:Name="saveButton" Content="保存" Grid.Row="0" Grid.Column="1" Margin="0,0,3,0" />
                                     <Button Content="削除" Grid.Row="0" Grid.Column="2" />
                                 </Grid>
-                                
+
                                 <Grid Margin="0,0,0,3">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="90" />
@@ -138,9 +138,9 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="座標" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox x:Name="x" Grid.Row="1" Grid.Column="1" Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" AutomationProperties.Name="{Binding X}" />
                                     <Label Content="x" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" />
-                                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox x:Name="y" Grid.Row="1" Grid.Column="3" Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -154,9 +154,9 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="サイズ" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="width" Grid.Row="1" Grid.Column="1" Text="{Binding Width, UpdateSourceTrigger=PropertyChanged}"/>
                                     <Label Content="x" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" />
-                                    <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox x:Name="height" Grid.Row="1" Grid.Column="3" Text="{Binding Height, UpdateSourceTrigger=PropertyChanged}"/>
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -168,9 +168,9 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="ターゲット" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox x:Name="target" Grid.Row="1" Grid.Column="1" Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
-                                
+
                                 <Grid Margin="0,0,0,3">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="90" />
@@ -192,7 +192,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="保存先パス" Grid.Row="0" Grid.Column="0" Margin="0,0,0,3" />
-                                    <TextBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,3" Text="{Binding Filename2, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox x:Name="savePath" Grid.Row="0" Grid.Column="1" Margin="0,0,0,3" Text="{Binding SavePath, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -216,7 +216,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="{Binding SubFolderLabel}" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding SubFolderName, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox x:Name="subFolderName" Grid.Row="1" Grid.Column="1" Text="{Binding SubFolderName, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
 
                                 <Grid Margin="0,0,0,3">
@@ -240,7 +240,7 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <Label Content="{Binding NameLabel}" Grid.Row="1" Grid.Column="0" />
-                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Filename, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBox x:Name="filename" Grid.Row="1" Grid.Column="1" Text="{Binding Filename, UpdateSourceTrigger=PropertyChanged}" />
                                 </Grid>
                             </StackPanel>
                         </GroupBox>
